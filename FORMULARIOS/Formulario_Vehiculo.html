@@ -13,6 +13,34 @@
     <script src="/35/Vehiculo.js/script.js"></script>
 </head>
 <body>
+    <div class="container">
+        <!-- Inicia la Tabla Consulta del Formulario -->
+        <div class="consulta mt-4">
+            <div class="row">
+                <div class="col-6">
+                    <h3>Lista de Vehículos</h3>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="table table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID VEHÍCULO</th>
+                                <th>MARCA</th>
+                                <th>MODELO</th>
+                                <th>AÑO</th>
+                                <th>FECHA MATRÍCULA</th>
+                                <th>NÚMERO PLACA</th>
+                                <th>ESTADO</th>
+                            </tr>
+                        </thead>
+                        <!-- El cuerpo de la tabla se crea dinamicamente desde JS -->
+                        <tbody id="DataVehiculos"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
 </body>
 </html>
