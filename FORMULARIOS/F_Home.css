@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: hsl(247,83%,65%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,5 +61,5 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: #f1f1f1;
+    background-color: #c2fdfd;
 }
