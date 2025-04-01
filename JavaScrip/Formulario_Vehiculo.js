@@ -1,6 +1,7 @@
 // URL
 var UrlGetAll = 'http://localhost:5001/vehiculo/TodoslosVehiculos';
 var UrlInsertVehiculo = 'http://localhost:5001/vehiculo/InsertarVehiculo';
+var UrlDeleteVehiculo = 'http://localhost:5001/vehiculo/EliminarVehiculo';
 
 
 $(document).ready(function() {
@@ -109,3 +110,33 @@ function ActualizarVehiculo() {
         }
     });
 }
+
+//Funcion para eliminar vehiculo
+
+function EliminarVehiculo(id_vehiculo) {
+    if (!confirm('¿Está seguro que desea eliminar este vehículo?')) {
+        return;
+    }
+    
+    var datovehiculo = {
+        id_vehiculo: id_vehiculo
+    };
+    
+    var datovehiculojson = JSON.stringify(datovehiculo);
+    
+    $.ajax({
+        url: UrlDeleteVehiculo,
+        type: 'DELETE',
+        data: datovehiculojson,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(response) {
+            alert("Vehículo eliminado correctamente");
+            CargarVehiculos();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            alert("Error al eliminar vehículo: " + textStatus);
+        }
+    });
+}
+
