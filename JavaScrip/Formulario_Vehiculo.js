@@ -1,5 +1,6 @@
 // URL
 var UrlGetAll = 'http://localhost:5001/vehiculo/TodoslosVehiculos';
+var UrlInsertVehiculo = 'http://localhost:5001/vehiculo/InsertarVehiculo';
 
 
 $(document).ready(function() {
@@ -74,3 +75,4 @@ function AgregarVehiculo() {
         }
     });
 }
+
