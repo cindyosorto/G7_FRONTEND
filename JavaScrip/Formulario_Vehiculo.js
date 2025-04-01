@@ -76,3 +76,36 @@ function AgregarVehiculo() {
     });
 }
 
+//Función para actualizar un vehículo
+
+function ActualizarVehiculo() {
+    var datovehiculo = {
+        id_vehiculo: $('#ID_VEHICULO').val(),
+        marca: $('#MARCA').val(),
+        modelo: $('#MODELO').val(),
+        anio: $('#ANIO').val(),
+        fecha_matricula: $('#FECHA_MATRICULA').val(),
+        numero_placa: $('#NUMERO_PLACA').val(),
+        estado: $('#ESTADO').val()
+    };
+    
+    var datovehiculojson = JSON.stringify(datovehiculo);
+    
+    $.ajax({
+        url: UrlUpdateVehiculo,
+        type: 'PUT',
+        data: datovehiculojson,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(response) {
+            alert('Vehículo actualizado correctamente');
+            CargarVehiculos();
+            $('#ID_VEHICULO').prop('readonly', false);
+            $('#btnAgregar').show();
+            $('#btnActualizar').hide();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            alert('Error al actualizar vehículo: ' + textStatus);
+        }
+    });
+}
