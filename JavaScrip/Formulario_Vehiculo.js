@@ -44,3 +44,33 @@ function CargarVehiculos() {
     
     limpiarFormulario();
 }
+
+//Función para agregar un vehículo
+function AgregarVehiculo() {
+    var datovehiculo = {
+        id_vehiculo: $('#ID_VEHICULO').val(),
+        marca: $('#MARCA').val(),
+        modelo: $('#MODELO').val(),
+        anio: $('#ANIO').val(),
+        fecha_matricula: $('#FECHA_MATRICULA').val(),
+        numero_placa: $('#NUMERO_PLACA').val(),
+        estado: $('#ESTADO').val()
+    };
+    
+    var datovehiculojson = JSON.stringify(datovehiculo);
+    
+    $.ajax({
+        url: UrlInsertVehiculo,
+        type: 'POST',
+        data: datovehiculojson,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(response) {
+            alert('Vehículo agregado correctamente');
+            CargarVehiculos();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            alert('Error al agregar vehículo: ' + textStatus + ' - ' + errorThrown);
+        }
+    });
+}
