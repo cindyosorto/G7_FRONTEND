@@ -2,7 +2,8 @@
 var UrlGetAll = 'http://localhost:5001/vehiculo/TodoslosVehiculos';
 var UrlInsertVehiculo = 'http://localhost:5001/vehiculo/InsertarVehiculo';
 var UrlDeleteVehiculo = 'http://localhost:5001/vehiculo/EliminarVehiculo';
-
+var UrlGetById = 'http://localhost:5001/vehiculo/buscarporId';
+var UrlUpdateVehiculo = 'http://localhost:5001/vehiculo/actualizarVehiculo';
 
 $(document).ready(function() {
     CargarVehiculos();
@@ -140,3 +141,10 @@ function EliminarVehiculo(id_vehiculo) {
     });
 }
 
+// funcion para limpiar
+function limpiarFormulario() {
+    $("#FormVehiculo")[0].reset();
+    $('#ID_VEHICULO').prop('readonly', false);
+    $('#btnAgregar').show();
+    $('#btnActualizar').hide();
+}
