@@ -1,152 +1,197 @@
-// URL
-var UrlGetAll = 'http://localhost:5007/vehiculo/TodoslosVehiculos';
-var UrlInsertVehiculo = 'http://localhost:5007/vehiculo/InsertarVehiculo';
-var UrlDeleteVehiculo = 'http://localhost:5007/vehiculo/EliminarVehiculo';
-var UrlGetById = 'http://localhost:5007/vehiculo/buscarporId';
-var UrlUpdateVehiculo = 'http://localhost:5007/vehiculo/actualizarVehiculo';
+// URLs de las APIs
+const UrlGetAll = 'http://localhost:5007/vehiculo/TodoslosVehiculos';
+const UrlInsertVehiculo = 'http://localhost:5007/vehiculo/InsertarVehiculo';
+const UrlDeleteVehiculo = 'http://localhost:5007/vehiculo/EliminarVehiculo';
+const UrlGetById = 'http://localhost:5007/vehiculo/buscarporId';
+const UrlUpdateVehiculo = 'http://localhost:5007/vehiculo/actualizarVehiculo';
 
-$(document).ready(function() {
-    CargarVehiculos();
-});
+// ********* FUNCIONES PARA MOSTRAR/OCULTAR FORMULARIO *********
+function mostrarFormulario() {
+    $('#formularioVehiculo').show();
+    $('#btnMostrarFormulario').hide();
+    limpiarFormulario();
+}
 
-// Función para cargar todos los vehiculos en la tabla
+function ocultarFormulario() {
+    $('#formularioVehiculo').hide();
+    $('#btnMostrarFormulario').show();
+    limpiarFormulario();
+}
+
+// ********* FUNCIÓN PARA CARGAR VEHÍCULOS *********
 function CargarVehiculos() {
     $.ajax({
         url: UrlGetAll,
         type: 'GET',
         dataType: 'json',
         success: function(response) {
-            var items = response;
-            var valores = '';
+            const vehiculos = response;
+            let tablaHTML = '';
             
-            for(var i = 0; i < items.length; i++) {
-                valores += '<tr>' +
-                    '<td>' + items[i].id_vehiculo + '</td>' +
-                    '<td>' + items[i].marca + '</td>' +
-                    '<td>' + items[i].modelo + '</td>' +
-                    '<td>' + items[i].anio + '</td>' +
-                    '<td>' + items[i].fecha_matricula + '</td>' +
-                    '<td>' + items[i].numero_placa + '</td>' +
-                    '<td>' + items[i].estado + '</td>' +
-                    '<td>' +
-                    '<button class="btn btn-info" onclick="CargarVehiculoParaEditar(\'' + items[i].id_vehiculo + '\')">Editar</button>' +
-                    '</td>' +
-                    '<td>' +
-                    '<button class="btn btn-danger" onclick="EliminarVehiculo(\'' + items[i].id_vehiculo + '\')">Eliminar</button>' +
-                    '</td>' +
-                '</tr>';
-            }
+            vehiculos.forEach(vehiculo => {
+                tablaHTML += `
+                <tr>
+                    <td>${vehiculo.id_vehiculo}</td>
+                    <td>${vehiculo.marca}</td>
+                    <td>${vehiculo.modelo}</td>
+                    <td>${vehiculo.anio}</td>
+                    <td>${new Date(vehiculo.fecha_matricula).toLocaleDateString()}</td>
+                    <td>${vehiculo.numero_placa}</td>
+                    <td>${vehiculo.estado}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="CargarVehiculoParaEditar('${vehiculo.id_vehiculo}')">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+                        <button class="btn btn-danger btn-sm ms-1" onclick="EliminarVehiculo('${vehiculo.id_vehiculo}')">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>`;
+            });
             
-            $('#DataVehiculos').html(valores);
+            $('#DataVehiculos').html(tablaHTML);
         },
         error: function(xhr, status, error) {
             console.error("Error al cargar vehículos:", error);
             alert("Error al cargar vehículos. Ver consola para más detalles.");
         }
     });
-    
-    limpiarFormulario();
 }
 
-//Función para agregar un vehículo
+// ********* FUNCIÓN PARA AGREGAR VEHÍCULO *********
 function AgregarVehiculo() {
-    var datovehiculo = {
+    const vehiculo = {
         id_vehiculo: $('#ID_VEHICULO').val(),
         marca: $('#MARCA').val(),
         modelo: $('#MODELO').val(),
         anio: $('#ANIO').val(),
         fecha_matricula: $('#FECHA_MATRICULA').val(),
         numero_placa: $('#NUMERO_PLACA').val(),
-        estado: $('#ESTADO').val()
+        estado: $('#ESTADO').val().toUpperCase()
     };
-    
-    var datovehiculojson = JSON.stringify(datovehiculo);
 
-    //alert(datoavehiculojson); // esta alerta es_solo para validar la estructura JSON
-    
+    if (!validarVehiculo(vehiculo)) return;
+
     $.ajax({
         url: UrlInsertVehiculo,
         type: 'POST',
-        data: datovehiculojson,
-        dataType: 'json',
+        data: JSON.stringify(vehiculo),
         contentType: 'application/json',
-        success: function(response) {
+        success: function() {
             alert('Vehículo agregado correctamente');
             CargarVehiculos();
+            ocultarFormulario();
         },
-        error: function(xhr, textStatus, errorThrown) {
-            alert('Error al agregar vehículo: ' + textStatus + ' - ' + errorThrown);
+        error: function(xhr, textStatus, error) {
+            alert(`Error al agregar vehículo: ${xhr.status} - ${error}`);
         }
     });
 }
 
-//Función para actualizar un vehículo
+// ********* FUNCIÓN PARA CARGAR VEHÍCULO PARA EDITAR *********
+function CargarVehiculoParaEditar(idVehiculo) {
+    mostrarFormulario();
+    $('.card-title').text('Editar Vehículo');
+    
+    $.ajax({
+        url: UrlGetById,
+        type: 'POST',
+        data: JSON.stringify({ id_vehiculo: idVehiculo }),
+        contentType: 'application/json',
+        success: function(response) {
+            $('#ID_VEHICULO').val(response.id_vehiculo).prop('readonly', true);
+            $('#MARCA').val(response.marca);
+            $('#MODELO').val(response.modelo);
+            $('#ANIO').val(response.anio);
+            $('#FECHA_MATRICULA').val(response.fecha_matricula.split('T')[0]);
+            $('#NUMERO_PLACA').val(response.numero_placa);
+            $('#ESTADO').val(response.estado);
+            
+            $('#btnagregar').hide();
+            $('#btnGuardarCambios').show();
+        },
+        error: function(xhr, textStatus, error) {
+            alert(`Error al cargar vehículo: ${xhr.status} - ${error}`);
+        }
+    });
+}
 
+// ********* FUNCIÓN PARA ACTUALIZAR VEHÍCULO *********
 function ActualizarVehiculo() {
-    var datovehiculo = {
+    const vehiculo = {
         id_vehiculo: $('#ID_VEHICULO').val(),
         marca: $('#MARCA').val(),
         modelo: $('#MODELO').val(),
         anio: $('#ANIO').val(),
         fecha_matricula: $('#FECHA_MATRICULA').val(),
         numero_placa: $('#NUMERO_PLACA').val(),
-        estado: $('#ESTADO').val()
+        estado: $('#ESTADO').val().toUpperCase()
     };
-    
-    var datovehiculojson = JSON.stringify(datovehiculo);
-    
+
+    if (!validarVehiculo(vehiculo)) return;
+
     $.ajax({
         url: UrlUpdateVehiculo,
         type: 'PUT',
-        data: datovehiculojson,
-        dataType: 'json',
+        data: JSON.stringify(vehiculo),
         contentType: 'application/json',
-        success: function(response) {
+        success: function() {
             alert('Vehículo actualizado correctamente');
             CargarVehiculos();
-            $('#ID_VEHICULO').prop('readonly', false);
-            $('#btnAgregar').show();
-            $('#btnActualizar').hide();
+            ocultarFormulario();
         },
-        error: function(xhr, textStatus, errorThrown) {
-            alert('Error al actualizar vehículo: ' + textStatus);
+        error: function(xhr, textStatus, error) {
+            alert(`Error al actualizar vehículo: ${xhr.status} - ${error}`);
         }
     });
 }
 
-//Funcion para eliminar vehiculo
-
-function EliminarVehiculo(id_vehiculo) {
-    if (!confirm('¿Está seguro que desea eliminar este vehículo?')) {
-        return;
-    }
-    
-    var datovehiculo = {
-        id_vehiculo: id_vehiculo
-    };
-    
-    var datovehiculojson = JSON.stringify(datovehiculo);
+// ********* FUNCIÓN PARA ELIMINAR VEHÍCULO *********
+function EliminarVehiculo(idVehiculo) {
+    if (!confirm('¿Está seguro que desea eliminar este vehículo?')) return;
     
     $.ajax({
         url: UrlDeleteVehiculo,
         type: 'DELETE',
-        data: datovehiculojson,
-        dataType: 'json',
+        data: JSON.stringify({ id_vehiculo: idVehiculo }),
         contentType: 'application/json',
-        success: function(response) {
-            alert("Vehículo eliminado correctamente");
+        success: function() {
+            alert('Vehículo eliminado correctamente');
             CargarVehiculos();
         },
-        error: function(xhr, textStatus, errorThrown) {
-            alert("Error al eliminar vehículo: " + textStatus);
+        error: function(xhr, textStatus, error) {
+            alert(`Error al eliminar vehículo: ${xhr.status} - ${error}`);
         }
     });
 }
 
-// funcion para limpiar
+// ********* FUNCIÓN PARA LIMPIAR FORMULARIO *********
 function limpiarFormulario() {
     $("#FormVehiculo")[0].reset();
     $('#ID_VEHICULO').prop('readonly', false);
-    $('#btnAgregar').show();
-    $('#btnActualizar').hide();
+    $('.card-title').text('Agregar Vehículo');
+    $('#btnagregar').show();
+    $('#btnGuardarCambios').hide();
 }
+
+// ********* FUNCIÓN PARA VALIDAR DATOS *********
+function validarVehiculo(vehiculo) {
+    if (!vehiculo.id_vehiculo || !vehiculo.marca || !vehiculo.modelo || !vehiculo.anio || 
+        !vehiculo.fecha_matricula || !vehiculo.numero_placa || !vehiculo.estado) {
+        alert('Todos los campos son obligatorios');
+        return false;
+    }
+    
+    if (isNaN(vehiculo.anio) || vehiculo.anio.length !== 4) {
+        alert('El año debe ser un número de 4 dígitos');
+        return false;
+    }
+    
+    return true;
+}
+
+// ********* INICIALIZACIÓN *********
+$(document).ready(function() {
+    $('#btnMostrarFormulario').click(mostrarFormulario);
+    CargarVehiculos();
+});
