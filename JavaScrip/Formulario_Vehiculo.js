@@ -1,9 +1,9 @@
 // URL
-var UrlGetAll = 'http://localhost:5001/vehiculo/TodoslosVehiculos';
-var UrlInsertVehiculo = 'http://localhost:5001/vehiculo/InsertarVehiculo';
-var UrlDeleteVehiculo = 'http://localhost:5001/vehiculo/EliminarVehiculo';
-var UrlGetById = 'http://localhost:5001/vehiculo/buscarporId';
-var UrlUpdateVehiculo = 'http://localhost:5001/vehiculo/actualizarVehiculo';
+var UrlGetAll = 'http://localhost:5007/vehiculo/TodoslosVehiculos';
+var UrlInsertVehiculo = 'http://localhost:5007/vehiculo/InsertarVehiculo';
+var UrlDeleteVehiculo = 'http://localhost:5007/vehiculo/EliminarVehiculo';
+var UrlGetById = 'http://localhost:5007/vehiculo/buscarporId';
+var UrlUpdateVehiculo = 'http://localhost:5007/vehiculo/actualizarVehiculo';
 
 $(document).ready(function() {
     CargarVehiculos();
@@ -61,6 +61,8 @@ function AgregarVehiculo() {
     };
     
     var datovehiculojson = JSON.stringify(datovehiculo);
+
+    //alert(datoavehiculojson); // esta alerta es_solo para validar la estructura JSON
     
     $.ajax({
         url: UrlInsertVehiculo,
