@@ -9,9 +9,10 @@ document.getElementById("formularioSelect").addEventListener("change", function(
             window.open("Formulario_Vehiculo.html", "_blank");
             break;
         case "form3": // CLIENTE
-            window.open("CLIENTE.html", "_blank");
+            window.open("cliente.html", "_blank");
             break;
         default:
             console.log("Formulario no reconocido");
     }
 });
+// VEHICULO

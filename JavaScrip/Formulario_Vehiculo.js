@@ -6,6 +6,7 @@ const UrlGetById = 'http://localhost:5007/vehiculo/buscarporId';
 const UrlUpdateVehiculo = 'http://localhost:5007/vehiculo/actualizarVehiculo';
 
 // ********* FUNCIONES PARA MOSTRAR/OCULTAR FORMULARIO *********
+// ********* FUNCIONES PARA MOSTRAR/OCULTAR FORMULARIO *********
 function mostrarFormulario() {
     $('#formularioVehiculo').show();
     $('#btnMostrarFormulario').hide();
