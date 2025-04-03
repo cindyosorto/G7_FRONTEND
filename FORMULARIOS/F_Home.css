@@ -1,3 +1,4 @@
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -19,26 +20,49 @@ body {
     max-width: 600px;
 }
 
+/* Texto */
 h1, h2 {
     margin: 10px 0;
     color: #333;
 }
 
-label {
+/* Menú de formularios */
+.menu-formularios p {
     font-weight: bold;
-    display: block;
     margin: 10px 0;
+    color: #333;
 }
 
-select {
-    width: 100%;
-    padding: 8px;
+.menu-formularios ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
     margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 16px;
 }
 
+.menu-formularios a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    background-color: #007BFF;
+    transition: all 0.3s;
+    border: 1px solid #007BFF;
+    display: inline-block;
+    min-width: 120px;
+    text-align: center;
+}
+
+.menu-formularios a:hover {
+    background-color: white;
+    color: #007BFF;
+}
+
+/* Tabla */
 table {
     width: 100%;
     border-collapse: collapse;

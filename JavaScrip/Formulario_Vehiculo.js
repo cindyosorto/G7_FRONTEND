@@ -100,6 +100,7 @@ function CargarVehiculoParaEditar(idVehiculo) {
         contentType: 'application/json',
         success: function(response) {
             $('#ID_VEHICULO').val(response.id_vehiculo).prop('readonly', true);
+            $('#ID_VEHICULO').val(response.id_vehiculo).prop('readonly', true).prop('disabled', true);
             $('#MARCA').val(response.marca);
             $('#MODELO').val(response.modelo);
             $('#ANIO').val(response.anio);
@@ -169,6 +170,7 @@ function EliminarVehiculo(idVehiculo) {
 function limpiarFormulario() {
     $("#FormVehiculo")[0].reset();
     $('#ID_VEHICULO').prop('readonly', false);
+    $('#ID_VEHICULO').prop('readonly', false).prop('disabled', false);
     $('.card-title').text('Agregar Vehículo');
     $('#btnagregar').show();
     $('#btnGuardarCambios').hide();
