@@ -221,7 +221,7 @@ class ClienteApp {
     guardarCliente() {
         const id = $('#inputId').val();
         const datos = {
-            ID_CLIENTE: id || `CLI-${Math.floor(1000 + Math.random() * 9000)}`,
+            ID_CLIENTE: id || `${Math.floor(1000 + Math.random() * 9000)}`,
             nombre: $('#inputNombre').val(),
             apellidos: $('#inputApellidos').val(),
             fecha_nacimiento: $('#inputFechaNacimiento').val(),
@@ -300,7 +300,6 @@ class ClienteApp {
         const generos = { 
             'M': 'Masculino', 
             'F': 'Femenino', 
-            'O': 'Otro' 
         };
         return generos[genero] || genero || 'No especificado';
     }
